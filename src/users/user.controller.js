@@ -2,7 +2,7 @@ const Joi = require("joi");
 require("dotenv").config();
 const { v4: uuid } = require("uuid");
 
-const { sendEmail } = require("./helpers/mailer");
+// const { sendEmail } = require("./helpers/mailer");
 const User = require("./user.model");
 
 //Validate user schema
@@ -48,14 +48,14 @@ exports.Signup = async (req, res) => {
     let code = Math.floor(100000 + Math.random() * 900000);  //Generate random 6 digit code.                             
     let expiry = Date.now() + 60 * 1000 * 15;  //Set expiry 15 mins ahead from now
 
-    const sendCode = await sendEmail(result.value.email, code);
+    // const sendCode = await sendEmail(result.value.email, code);
 
-    if (sendCode.error) {
-      return res.status(500).json({
-        error: true,
-        message: "Couldn't send verification email.",
-      });
-    }
+    // if (sendCode.error) {
+    //   return res.status(500).json({
+    //     error: true,
+    //     message: "Couldn't send verification email.",
+    //   });
+    // }
     result.value.emailToken = code;
     result.value.emailTokenExpires = new Date(expiry);
     const newUser = new User(result.value);

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
-
-const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema(
   {
@@ -11,6 +10,14 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     resetPasswordToken: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
+
+    emailToken: { type: String, default: null },
+    emailTokenExpires: { type: Date, default: null },
+
+    accessToken: { type: String, default: null },
+
+    referralCode: { type: String, unique: true },
+    referrer: { type: String, default: null },
   },
   {
     timestamps: {
@@ -19,6 +26,7 @@ const userSchema = new Schema(
     },
   }
 );
+
 const User = mongoose.model("user", userSchema);
 module.exports = User;
 
