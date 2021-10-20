@@ -8,4 +8,5 @@ router.post("/signup", cleanBody, AuthController.Signup);
 
 router.post("/login", cleanBody, AuthController.Login);
 
+
 module.exports = router;

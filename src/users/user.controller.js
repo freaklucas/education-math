@@ -3,6 +3,8 @@ require("dotenv").config();
 const { v4: uuid } = require("uuid");
 
 // const { sendEmail } = require("./helpers/mailer");
+
+
 const User = require("./user.model");
 
 //Validate user schema
@@ -113,7 +115,19 @@ exports.Login = async (req, res) => {
     //     message: "Invalid credentials",
     //   });
     // }
-    // await user.save();
+
+    // ************************************************************************    
+    //Generate Access token
+    // const { error, token } = await generateJwt(user.email, user.userId);
+    // if (error) {
+    //   return res.status(500).json({
+    //     error: true,
+    //     message: "Couldn't create access token. Please try again later",
+    //   });
+    // }
+    // user.accessToken = token;
+    // *************************************************************************
+    await user.save();
     
     //Success
     return res.send({
@@ -128,3 +142,4 @@ exports.Login = async (req, res) => {
     });
   }
 };
+
