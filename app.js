@@ -1,20 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
-
-const multer = require('multer');
-const path = require('path');
-const ejs = require('ejs');
-
+const multer = require("multer");
+const path = require("path");
+const ejs = require("ejs");
 
 require("dotenv").config();
 
 const PORT = 5000;
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -36,15 +35,12 @@ app.get("/ping", (req, res) => {
 
 app.use("/users", require("./routes/users"));
 
-
-
 app.listen(PORT, () => {
   console.log("Server started listening on PORT : " + PORT);
 });
 
-
-app.set('view engine', 'ejs');
-app.use(express.static('uploads'));
+app.set("view engine", "ejs");
+app.use(express.static("uploads"));
 
 const questionSchema = new Schema({
   desc1: String,
@@ -58,29 +54,32 @@ const questionSchema = new Schema({
   answer: String,
 });
 
-questionModel = mongoose.model('question', questionSchema);
+questionModel = mongoose.model("question", questionSchema);
 const upload = multer({
   storage: multer.diskStorage({
     distination: (req, file, cb) => {
-      cb(null, './uploads');
+      cb(null, "./uploads");
     },
     filename: function (req, file, callback) {
-      callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-    }
-  })
-})
+      callback(
+        null,
+        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+      );
+    },
+  }),
+});
 
-app.get('/', (req, res) => {
-  res.render('home')
-})
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
-app.post('/post', upload.single('image'), (req, res) => {
+app.post("/post", upload.single("image"), (req, res) => {
   console.log(req.file);
-  const x = new questionModel ();
+  const x = new questionModel();
   x.desc1 = req.body.desc1;
   x.desc2 = req.body.desc2;
   x.area = req.body.area;
-  x.image = req.file.filaname;
+  x.image = req.file.filename;
   x.alternative1 = req.body.alternative1;
   x.alternative2 = req.body.alternative2;
   x.alternative3 = req.body.alternative3;
@@ -89,20 +88,18 @@ app.post('/post', upload.single('image'), (req, res) => {
 
   x.save((err, doc) => {
     if (!err) {
-      console.log('saved successfully');
-      res.redirect('/questions'); 
-    }
-    else {
+      console.log("saved successfully");
+      res.redirect("/questions");
+    } else {
       console.log(err);
     }
-  })
+  });
 });
 
-app.get('/questions', (res, req) => {
-  questionModel.find()
-    .then(function (doc) {
-      res.render('question', {
-        item: doc
-      })
-    })
-})
+app.get("/questions", (res, req) => {
+  questionModel.find().then(function (doc) {
+    res.render("question", {
+      item: doc,
+    });
+  });
+});
