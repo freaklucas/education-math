@@ -2,6 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema;
+
+
+const multer = require('multer');
+const path = require('path');
+const ejs = require('ejs');
 
 
 require("dotenv").config();
@@ -21,9 +27,6 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); //optional
-
 app.get("/ping", (req, res) => {
   return res.send({
     error: false,
@@ -33,6 +36,65 @@ app.get("/ping", (req, res) => {
 
 app.use("/users", require("./routes/users"));
 
+
+
 app.listen(PORT, () => {
   console.log("Server started listening on PORT : " + PORT);
 });
+
+
+app.set('view engine', 'ejs');
+app.use(express.static('uploads'));
+
+const questionSchema = new Schema({
+  desc1: String,
+  desc2: String,
+  image: String,
+  alternative1: String,
+  alternative2: String,
+  alternative3: String,
+  alternative4: String,
+  answer: String,
+});
+
+questionModel = mongoose.model('question', questionSchema);
+const upload = multer({
+  storage: multer.diskStorage({
+    distination: (req, file, cb) => {
+      cb(null, './uploads');
+    },
+    filename: function (req, file, callback) {
+      callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+  })
+})
+
+app.get('/', (req, res) => {
+  res.render('home')
+})
+
+app.post('/post', upload.single('image'), (req, res) => {
+  console.log(req.file);
+  const x = new questionModel ();
+  x.desc1 = req.body.desc1;
+  x.desc2 = req.body.desc2;
+  x.image = req.file.filaname;
+  x.save((err, doc) => {
+    if (!err) {
+      console.log('saved successfully');
+      res.redirect('/questions');
+    }
+    else {
+      console.log(err);
+    }
+  })
+});
+
+app.get('/questions', (res, req) => {
+  questionModel.find()
+    .then(function (doc) {
+      res.render('question', {
+        item: doc
+      })
+    })
+})

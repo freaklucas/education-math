@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
+const app = require("express");
+const bodyParser = require('body-parser');
+
+const fs = require('fs');
+const path = require('path');
+
 
 const userSchema = new Schema(
   {
@@ -18,24 +24,14 @@ const userSchema = new Schema(
     referrer: { type: String, default: null },
   },
   {
-    image: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    description: {
-      type: String,
-      required: true,
-    },
-  },
-  {
     timestamps: {
       createdAt: "createdAt",
       updatedAt: "updatedAt",
     },
   }
 );
+
+
 
 const User = mongoose.model("user", userSchema);
 module.exports = User;
@@ -55,3 +51,4 @@ module.exports.comparePasswords = async (inputPassword, hashedPassword) => {
     throw new Error("Comparison failed", error);
   }
 };
+
