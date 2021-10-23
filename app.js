@@ -49,6 +49,7 @@ app.use(express.static('uploads'));
 const questionSchema = new Schema({
   desc1: String,
   desc2: String,
+  area: String,
   image: String,
   alternative1: String,
   alternative2: String,
@@ -78,6 +79,7 @@ app.post('/post', upload.single('image'), (req, res) => {
   const x = new questionModel ();
   x.desc1 = req.body.desc1;
   x.desc2 = req.body.desc2;
+  x.area = req.body.area;
   x.image = req.file.filaname;
   x.alternative1 = req.body.alternative1;
   x.alternative2 = req.body.alternative2;
