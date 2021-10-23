@@ -79,10 +79,16 @@ app.post('/post', upload.single('image'), (req, res) => {
   x.desc1 = req.body.desc1;
   x.desc2 = req.body.desc2;
   x.image = req.file.filaname;
+  x.alternative1 = req.body.alternative1;
+  x.alternative2 = req.body.alternative2;
+  x.alternative3 = req.body.alternative3;
+  x.alternative4 = req.body.alternative4;
+  x.answer = req.body.answer;
+
   x.save((err, doc) => {
     if (!err) {
       console.log('saved successfully');
-      res.redirect('/questions');
+      res.redirect('/questions'); 
     }
     else {
       console.log(err);

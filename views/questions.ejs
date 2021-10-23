@@ -20,6 +20,18 @@
                 <th>Alternativa4</th>
                 <th>Resposta Correta</th>
             </tr>
+            <% item.forEach (function (item) { %>
+                <tr>
+                    <td><%=item.desc1%></td>
+                    <td><%=item.desc2%></td>
+                    <td><img src="<%=item.image%>"></td>
+                    <td><%=item.alternative1%></td>
+                    <td><%=item.alternative2%></td>
+                    <td><%=item.alternative3%></td>
+                    <td><%=item.alternative4%></td>
+                    <td><%=item.answer%></td>
+                </tr>
+            <%})%>
         </table>
     </center>
 </body>
