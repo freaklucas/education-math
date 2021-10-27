@@ -45,6 +45,7 @@ app.use(express.static("uploads"));
 const questionSchema = new Schema({
   desc1: String,
   desc2: String,
+  nivelDificuldade: String,
   area: String,
   image: String,
   alternative1: String,
@@ -78,12 +79,14 @@ app.post("/post", upload.single("image"), (req, res) => {
   const x = new questionModel();
   x.desc1 = req.body.desc1;
   x.desc2 = req.body.desc2;
+  x.nivelDificuldade = req.body.nivelDificuldade;
   x.area = req.body.area;
   x.image = req.file.filename;
   x.alternative1 = req.body.alternative1;
   x.alternative2 = req.body.alternative2;
   x.alternative3 = req.body.alternative3;
   x.alternative4 = req.body.alternative4;
+
   x.answer = req.body.answer;
 
   x.save((err, doc) => {
